@@ -10,7 +10,14 @@
  * PATTERN SINGLETON = On ne peut créer qu'UNE SEULE instance
  */
 
+
+
 namespace App;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
 use PDO;
 use PDOException;
@@ -25,19 +32,6 @@ class Database
      * ?PDO = peut être null ou un objet PDO
      */
     private static ?PDO $instance = null;
-
-    /**
-     * Configuration de la base de données
-     * 
-     * const = constante (ne change jamais)
-     * private = accessible uniquement dans cette classe
-     */
-    private const HOST = 'localhost';
-    private const PORT = '5432';
-    private const DBNAME = 'discord';
-    private const USERNAME = 'noa';
-    private const PASSWORD = 'leonoa09';
-
     /**
      * Constructeur PRIVÉ
      * 
@@ -60,46 +54,35 @@ class Database
      * UTILISATION :
      * $pdo = Database::getConnection();
      */
-    public static function getConnection(): PDO
+     public static function getConnection(): PDO
     {
-        // Si pas encore de connexion, on la crée
         if (self::$instance === null) {
             try {
-                // Créer le DSN (Data Source Name)
                 $dsn = sprintf(
-                    'pgsql:host=%s;port=%s;dbname=%s',
-                    self::HOST,
-                    self::PORT,
-                    self::DBNAME
+                    'pgsql:host=%s;port=%s;dbname=%s;sslmode=%s',
+                    $_ENV['DB_HOST'],
+                    $_ENV['DB_PORT'],
+                    $_ENV['DB_NAME'],
+                    $_ENV['DB_SSLMODE'] ?? 'require'
                 );
 
-                // Créer la connexion PDO
                 self::$instance = new PDO(
                     $dsn,
-                    self::USERNAME,
-                    self::PASSWORD,
+                    $_ENV['DB_USER'],
+                    $_ENV['DB_PASSWORD'],
                     [
-                            // Lève une exception en cas d'erreur
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-
-                            // Retourne les résultats en tableaux associatifs
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-
-                            // Utilise les vraies requêtes préparées
                         PDO::ATTR_EMULATE_PREPARES => false
                     ]
                 );
 
             } catch (PDOException $e) {
-                // Logger l'erreur
                 error_log("Erreur de connexion BDD : " . $e->getMessage());
-
-                // Relancer l'exception
                 throw $e;
             }
         }
 
-        // Retourner l'instance
         return self::$instance;
     }
 
@@ -109,6 +92,7 @@ class Database
      * Sinon on pourrait faire :
      * $db2 = clone $db1;  // ❌ INTERDIT
      */
+
     private function __clone()
     {
         // Interdit
