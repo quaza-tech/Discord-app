@@ -1,0 +1,965 @@
+@import "../css/styleUI.css";
+
+/* =============================================================================
+   RESET & BASE
+   ============================================================================= */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+button:hover {
+    background-color: #40444b;
+}
+
+
+/* =============================================================================
+   LAYOUT PRINCIPAL
+   ============================================================================= */
+
+.conteneur {
+    display: flex;
+    height: 100%;
+}
+
+/* Grille principale du chat */
+.wrapper {
+    display: grid;
+    height: calc(100vh - 80px);
+    width: 100%;
+    gap: 10px;
+    grid-template-areas:
+        "messages messages messages messages info"
+        "messages messages messages messages info"
+        "messages messages messages messages info"
+        "input    input    input    input    info";
+    grid-template-columns: 1fr 1fr 1fr 1fr 250px;
+    grid-template-rows: 1fr 1fr 1fr 70px;
+}
+
+
+/* =============================================================================
+   BARRE LATÉRALE — SERVEURS (.serv)
+   ============================================================================= */
+
+.serv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 5%;
+    padding: 10px 0;
+    background-color: #36393f;
+    color: white;
+    border-right: 3px solid #40444b;
+}
+
+.serv .container-icon-serv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.serv .container-icon-serv .icon-serv,
+.serv .ajout_serv {
+    width: 48px;
+    height: 48px;
+    margin-top: 10%;
+    border-radius: 20%;
+    background-color: #7289da;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.serv .container-icon-serv .icon-serv:hover,
+.serv .ajout_serv:hover {
+    background-color: #5b6eae;
+}
+
+.serv .btn-serv,
+.serv .mp {
+    width: 100%;
+    padding: 8px 0;
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+
+/* =============================================================================
+   BARRE LATÉRALE — SALONS (.salon)
+   ============================================================================= */
+
+.salon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 12%;
+    background-color: #36393f;
+    color: white;
+    border-right: 3px solid #40444b;
+}
+
+/* En-tête du serveur dans la colonne salon */
+.serveur_salon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 20px;
+    width: 100%;
+}
+
+.serveur_salon .banner-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.serveur_salon .server-content {
+    display: flex;
+    position: absolute;
+    top: 0;
+    gap: 4px;
+    width: 100%;
+    padding: 0;
+    object-fit: cover;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), rgba(0, 0, 0, 0);
+}
+
+.serveur_salon .server-content:hover {
+    background-color: rgba(54, 57, 63, 0.8);
+    transition: background-color 0.5s ease-in-out;
+}
+
+.serveur_salon .server-content .server-name {
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 10%;
+    padding: 5px 10px;
+    border-radius: 20%;
+    color: white;
+}
+
+.serveur_salon .server-content .server-name:hover {
+    background-color: rgba(54, 57, 63, 1);
+    transition: background-color 0.5s ease-in-out;
+}
+
+.serveur_salon .server-content .addFriendServer:hover {
+    background-color: rgba(54, 57, 63, 1);
+    transition: background-color 0.5s ease-in-out;
+}
+
+.serveur_salon .addFriendServer {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    border-radius: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.2s;
+}
+
+.serveur_salon .addFriendServer:hover {
+    background-color: #43464d;
+}
+
+.serveur_salon .addFriendServer .addFriends {
+    width: 28px;
+    height: 28px;
+    filter: invert(1);
+}
+
+/* Séparateur de section (catégories de salons) */
+.separator-section {
+    color: #8e9297;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    width: 100%;
+    margin-left: 10%;
+    padding: 15px 10px 5px 10px;
+    align-items: flex-start;
+}
+
+/* Boutons de salon */
+.btn-salon,
+.container-salon {
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s ease;
+}
+
+.btn-salon.salon-actif {
+    background-color: #404249;
+    color: white;
+}
+
+.btn-salon.salon-actif h2 {
+    color: white;
+}
+
+
+/* =============================================================================
+   ZONE DE CHAT
+   ============================================================================= */
+
+.chat {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    background-color: #36393f;
+}
+
+/* En-tête du chat */
+#entete {
+    display: flex;
+    position: relative;
+    flex: 0 0 auto;
+    align-items: center;
+    height: 75px;
+    padding: 10px 0;
+    background-color: #36393f;
+    color: white;
+    border-bottom: 5px solid #202225;
+}
+
+#entete h1 {
+    font-size: 28px;
+    color: white;
+    padding: 0 10px;
+    margin: 10px 0;
+}
+
+#entete h2 {
+    font-size: 18px;
+    font-weight: normal;
+    color: #72767d;
+    margin: 0 0 0 10px;
+}
+
+#entete h3 {
+    font-size: 14px;
+    font-weight: normal;
+    color: #72767d;
+    margin: 0 10px 0 0;
+}
+
+#entete p {
+    margin: 0 0 0 20px;
+    font-size: 32px;
+    color: #72767d;
+}
+
+#entete .Friends {
+    width: 30px;
+    height: 30px;
+}
+
+#pseudo {
+    position: absolute;
+    right: 200px;
+    font-size: 12px;
+    color: #72767d;
+}
+
+.header-actions-right {
+    position: absolute;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#entete #btn-deconnexion {
+    top: auto;
+    padding: 8px 16px;
+    background-color: #7289da;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#btn-deconnexion:hover {
+    background-color: #4133c1;
+}
+
+/* Zone d'affichage des messages */
+#affichage {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #36393f;
+    scrollbar-width: thin;
+    scrollbar-color: #636973 #36393f;
+
+    /* Surcharge pour la grille .wrapper */
+    grid-area: messages;
+    border-radius: 8px;
+}
+
+.aucunMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+/* Zone d'envoi */
+#envoyer {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+    background-color: #36393f;
+    border-top: 1px solid #40444b;
+
+    /* Surcharge pour la grille .wrapper */
+    grid-area: input;
+    align-items: center;
+    background-color: #40444b;
+    border-radius: 8px;
+    margin: -3% 1% 1% 1%;
+}
+
+#envoyer textarea {
+    flex: 1;
+    padding: 11px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    resize: none;
+    background-color: #40444b;
+    color: #dcddde;
+    outline: none;
+}
+
+#envoyer textarea::placeholder {
+    color: #72767d;
+    font-size: 16px;
+}
+
+/* Panneau d'informations (colonne droite) */
+.info {
+    grid-area: info;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    background-color: #2f3136;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+
+
+/* =============================================================================
+   MESSAGES
+   ============================================================================= */
+
+.message {
+    display: flex;
+    position: relative;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    background-color: #36393f;
+    border-bottom: 1px solid #40444b;
+}
+
+.message:hover {
+    background-color: #40444b;
+}
+
+.message .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.message-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.message .auteur {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.message .texte {
+    color: #dcddde;
+    font-size: 15px;
+    line-height: 1.4;
+    margin: 0 0 4px 0;
+}
+
+.message .date {
+    color: #72767d;
+    font-size: 11px;
+    margin: 0;
+}
+
+/* Actions sur les messages (modifier / supprimer) */
+.action {
+    display: none;
+    visibility: hidden;
+    position: absolute;
+    right: 10px;
+    top: 2px;
+    width: 6%;
+    height: 30px;
+    gap: 5px;
+    border-radius: 5px;
+    background-color: #464646;
+    align-items: center;
+    justify-content: center;
+}
+
+.action button {
+    background-color: transparent;
+    border: none;
+    color: #72767d;
+    cursor: pointer;
+    font-size: 12px;
+    width: 50%;
+}
+
+.message :hover > .action {
+    visibility: visible;
+    display: inline-flex;
+}
+
+.icon-pen,
+.icon-trash {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.icon-pen {
+    filter: invert(100);
+}
+
+.icon-trash {
+    filter: hue-rotate(20deg);
+    width: 20px;
+    height: 20px;
+}
+
+
+/* =============================================================================
+   MP & SALONS — BOUTONS DE LISTE
+   ============================================================================= */
+
+.btn-MP,.btn-cardUser,
+.btn-salon {
+    background: #35373c;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    width: 100%;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 4px;
+    transition: background 0.2s ease;
+}
+.btn-cardUser{
+    margin-right: 10%;
+    margin-left: 10%;
+}
+
+.btn-MP:hover {
+    background: rgb(68, 71, 78);
+}
+
+.container-MP,
+.container-salon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Avatar générique */
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Pseudonyme */
+.pseudo {
+    color: #dbdee1;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Icône amis */
+.addFriends {
+    width: 28px;
+    height: 28px;
+    filter: invert(1);
+}
+
+
+/* =============================================================================
+   SERVEURS — CARDS (liste de découverte)
+   ============================================================================= */
+
+.serveurs-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.serveur {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0 0 16px 0;
+    background-color: #2b2d31;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: visible;
+    transition: all 0.2s;
+}
+
+.serveur:hover {
+    background-color: #36393f;
+    border-color: #5865f2;
+}
+
+.serveur .server-banner {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+.serveur .icon {
+    position: absolute;
+    top: 80px;
+    left: 16px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid #2b2d31;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background-color: #2b2d31;
+    z-index: 2;
+}
+
+.server-content {
+    width: 100%;
+    padding: 60px 16px 0 16px;
+}
+
+.server-name {
+    display: block;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.server-description {
+    color: #b9bbbe;
+    font-size: 12px;
+    margin: 0 0 8px 0;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+}
+
+/* Stats membres */
+.server-stats {
+    display: flex;
+    gap: 16px;
+    color: #b9bbbe;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.server-stats .online {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.server-stats .online::before,
+.server-stats .total::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.server-stats .online::before {
+    background-color: #3ba55c;
+}
+
+.server-stats .total::before {
+    background-color: #b9bbbe;
+}
+
+/* Bouton rejoindre */
+.btn-join {
+    width: calc(100% - 32px);
+    margin: 0 16px;
+    padding: 8px 16px;
+    background-color: #3ba55c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-join:hover {
+    background-color: #2d7d46;
+}
+
+/* Bannières génériques */
+.banner-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* ⚠️ Sélecteur invalide dans l'original (manque le point) — conservé tel quel */
+banner-serv {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+
+/* =============================================================================
+   MODAL — LISTE DES SERVEURS
+   ============================================================================= */
+
+.liste-serv {
+    background-color: #313338;
+    border-radius: 8px;
+    padding: 30px 20px;
+    width: 1200px;
+    max-width: 90%;
+    max-height: 85vh;
+    position: relative;
+    z-index: 10000;
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: center;
+    scrollbar-color: #636973 #36393f;
+}
+
+.liste-serv .server-content {
+    align-items: left;
+    margin: auto;
+}
+
+.liste-serv h1 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+}
+
+.liste-serv .close-liste {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: #ed4245;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.liste-serv .close-liste:hover {
+    background-color: #c03537;
+}
+
+
+/* =============================================================================
+   MODAL — CONFIRMATION / AVERTISSEMENT
+   ============================================================================= */
+
+.voile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.warning {
+    background-color: #313338;
+    color: #f2f3f5;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    z-index: 10000;
+}
+
+.confirm,
+.annule {
+    padding: 10px 20px;
+    margin: 10px 5px;
+    background-color: #7289da;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.confirm:hover,
+.annule:hover {
+    background-color: #5b6eae;
+}
+
+.annule {
+    background-color: #747f8d;
+}
+
+.annule:hover {
+    background-color: #5d6269;
+}
+
+#newText {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin: 15px 0;
+    background-color: #40444b;
+    color: #dcddde;
+    border: 1px solid #202225;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+}
+
+#newText:focus {
+    border-color: #7289da;
+}
+
+/* =============================================================================
+   USER CARD — Profil popup style Discord
+   ============================================================================= */
+
+.user-card,.user-cardMP {
+    background-color: #232428;
+    border-radius: 8px;
+    width: 30%;
+    height: 70%;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.user-cardMP{
+    
+    width: 100%;
+    height: 100%;
+}
+
+.user-card-banner {
+    width: 100%;
+    height: 30%;
+    background-color: #c0392b;
+    background-size: cover;
+    background-position: center;
+}
+
+.user-card-avatar-wrapper {
+    position: relative;
+    margin: -40px 0 0 16px;
+    display: inline-block;
+}
+
+.user-card-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid #232428;
+    display: block;
+    object-fit: cover;
+}
+
+.user-card-status {
+    position: absolute;
+    bottom: 6px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #3ba55c;
+    border: 3px solid #232428;
+}
+
+.user-card-body {
+    padding: 8px 16px 8px 16px;
+    margin-top: 5%;
+}
+
+.user-card-username {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 8px 0 2px 0;
+}
+
+.user-card-tag {
+    color: #b9bbbe;
+    font-size: 13px;
+    margin: 0 0 8px 0;
+}
+
+.user-card-divider {
+    border: none;
+    border-top: 1px solid #3f4147;
+    margin: 8px 0;
+}
+
+.user-card-label {
+    color: #b9bbbe;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 8px 0 4px 0;
+}
+
+.user-card-bio {
+    color: #dcddde;
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.user-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.user-card-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.user-card-btn.primary {
+    background-color: #5865f2;
+    color: white;
+}
+
+.user-card-btn.primary:hover {
+    background-color: #4752c4;
+}
+
+.user-card-btn.secondary {
+    background-color: #4f545c;
+    color: white;
+}
+
+.user-card-btn.secondary:hover {
+    background-color: #686d73;
+}
+/* =============================================================================
+   UTILITAIRES
+   ============================================================================= */
+
+.btnMasque,.btnAfficheAmis {
+    filter: invert(1);
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    border-radius: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.2s;
+}
+.show {
+    display: block;
+    visibility: visible;
+}
+.dispawn {
+    display: none;
+    visibility: hidden;
+}
+.large {
+    width: 100%;
+}
+.wrapper.sans-info {
+    grid-template-areas:
+        "messages messages messages messages messages"
+        "messages messages messages messages messages"
+        "messages messages messages messages messages"
+        "input    input    input    input    input";
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}

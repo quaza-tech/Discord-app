@@ -1,0 +1,24 @@
+.toast {
+            position: fixed;
+            top: 20px;
+            right: -350px; /* Caché à droite au départ */
+            width: 300px;
+            padding: 15px 20px;
+            color: white;
+            font-family: sans-serif;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Effet ressort */
+        }
+
+        /* Classe qui déclenche l'entrée */
+        .toast.show {
+            right: 20px; /* Position d'affichage */
+        }
+
+        /* Couleurs selon le type */
+        .toast-error { background-color: #e74c3c; }
+        .toast-success { background-color: #2ecc71; }
+        .toast-info { background-color: #3498db; }
+        .toast-warning { background-color: #f1c40f; color: #333; }
