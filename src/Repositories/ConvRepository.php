@@ -70,6 +70,17 @@ class ConvRepository
         $stmt->execute([$userid, $userid, $userid, $userid]);
         return $stmt->fetchAll();
     }
+
+    public function isUserInConv(int $userId, int $convID): bool
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT * FROM conversations 
+         WHERE (user1_id = ? AND id = ?)
+         OR (user2_id = ? AND id = ?)"
+        );
+        $stmt->execute([$userId, $convID]);
+        return !empty($stmt->fetchAll());
+    }
     public function markAsRead(int $convId, int $userId)
     {
         $stmt = $this->pdo->prepare(

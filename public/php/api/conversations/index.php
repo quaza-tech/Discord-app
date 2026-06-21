@@ -30,8 +30,16 @@ try {
             if (!empty($_GET['id'])) {
                 // Messages d'une conversation spécifique
                 $convId = (int) $_GET['id'];
-                $messages = $repo->recup_Mp($convId);
-                echo json_encode($messages);
+                $res = $repo->isUserInConv($_SESSION['user'], $convId);
+
+                if ($res) {
+                    $messages = $repo->recup_Mp($convId);
+                    echo json_encode($messages);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Accès refusé']);
+                    exit;
+                }
+
             } else {
                 // Liste de toutes les conversations
                 $convs = $repo->findByUser((int) $_SESSION['user']);
@@ -46,7 +54,7 @@ try {
             $texte = $_POST['texte'] ?? '';
             $convId = $_POST['convID'] ?? '';
 
-            if (empty($texte) || empty($convId)) {
+            if (trim($texte) === "" || empty($convId)) {
                 echo json_encode(['status' => 'error', 'message' => 'Paramètres manquants']);
                 exit;
             }
@@ -63,7 +71,7 @@ try {
             $messageId = $data['id'] ?? '';
             $newText = $data['texte'] ?? '';
 
-            if (empty($messageId) || empty($newText)) {
+            if (trim($messageId) === "" || empty($newText)) {
                 echo json_encode(['status' => 'error', 'message' => 'Paramètres manquants']);
                 exit;
             }
