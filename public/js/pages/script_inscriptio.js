@@ -20,19 +20,17 @@ $(document).ready(function() {
         if (!vMdp.valid) return Validation.showToast(vMdp.error, 'error');
         if (!vMatch.valid) return Validation.showToast(vMatch.error, 'error');
 
-        $.ajax({ 
-            type: 'POST', 
-            url: '../php/inscription.php', 
-            data: {email: emailValue, pseudo: pseudoValue, mdp: mdpValue},
-            success: function(response) {
-                if (response.status === "success") {
+        API.register(emailValue,pseudoValue,mdpValue)
+        .then(function (reponse) {
+            if (reponse.status === "success") {
                     Validation.showToast("Compte créé !", 'info');
                     setTimeout(() => window.location.href = "index.html", 2000);
                 } else {
                     Validation.showToast("Erreur : Compte déjà existant ou données invalides", 'warning');
                 }
-            },
-            error: () => Validation.showToast("Erreur de connexion", 'error')
-        });
+        })
+        .catch(function () {
+            Validation.showToast("Erreur de connexion","error",3000)
+        })
     });
 });

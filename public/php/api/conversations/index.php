@@ -5,7 +5,7 @@
 // PUT  /api/conversations/index.php            → modifier un MP       (ancien : edit_message.php type mp)
 // DELETE /api/conversations/index.php          → supprimer un MP      (ancien : supp_message.php type mp)
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\ConvRepository;

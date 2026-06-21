@@ -2,7 +2,7 @@
 // POST /api/auth/login.php
 // Anciens fichiers : test_connexion.php
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\UserRepository;

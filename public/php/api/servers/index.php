@@ -3,7 +3,7 @@
 // GET  /api/servers/index.php?available → serveurs disponibles      (ancien : recup_serveur.php)
 // POST /api/servers/index.php           → rejoindre un serveur      (ancien : join_server.php)
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\ServerRepository;

@@ -1,7 +1,7 @@
 <?php
 // GET /api/members/index.php?server_id=X → membres + rôles d'un serveur (ancien : getMemberRole.php)
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\ServerRepository;

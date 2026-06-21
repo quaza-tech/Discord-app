@@ -1,7 +1,7 @@
 <?php
 // GET /api/channels/index.php?server_id=X → salons d'un serveur (ancien : recup_salon.php)
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\ServerRepository;

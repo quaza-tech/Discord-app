@@ -2,7 +2,7 @@
 // GET  /api/users/index.php          → infos user connecté (ancien : get_user_info.php)
 // GET  /api/users/index.php?id=X     → profil d'un user   (ancien : getUser.php)
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\UserRepository;

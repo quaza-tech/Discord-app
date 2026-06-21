@@ -2,7 +2,7 @@
 // POST /api/auth/password.php  → demande de reset (ancien : changement_mdp.php)
 // GET  /api/auth/password.php  → validation du token (ancien : reset_password.php)
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\UserRepository;

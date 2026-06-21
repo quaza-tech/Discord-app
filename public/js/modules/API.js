@@ -1,27 +1,18 @@
-const API = (function() {
+const API = (function () {
     'use strict';
-    
-    const CONFIG = {
-        BASE_URL: 'php/',
-        TIMEOUT: 10000
-    };
-    
-    let csrfToken = null;
-    
-    function request(endpoint, method, data) {
-        return new Promise(function(resolve, reject) {
-            $.ajax({
-                type: method,
-                url: CONFIG.BASE_URL + endpoint,
-                data: data,
-                dataType: 'json',
-                timeout: CONFIG.TIMEOUT,
-                success: function(response) {
-                    console.log("✅ API Success:", endpoint, response);
-                    resolve(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error('❌ API Error:', endpoint, xhr.responseText);
+
+    const BASE = 'php/api';
+
+    // Helper générique
+    function request(url, method, data) {
+        var options = {
+            url: url,
+            type: method,
+            success: function (response) {
+                console.log('API Success: ' + url.split('/').pop(), response);
+            },
+            error: function(xhr, status, error) {
+                    console.error('❌ API Error:', url, xhr.responseText);
                     
                     // Gestion des erreurs selon le code HTTP
                     if (xhr.status === 401) {
@@ -36,142 +27,14 @@ const API = (function() {
                     } else {
                         Validation.showToast("Erreur de connexion", "error", 3000);
                     }
-                    
-                    reject(error);
+                
                 }
-            });
-        });
-    }
-    
-    return {
-        // ────────────────────────────────────────
-        // AUTHENTIFICATION
-        // ────────────────────────────────────────
-        getUserInfo: function(){
-            return request('get_user_info.php', 'GET', null);
-        },
-        getUser:function(userid){
-            return request('getUser.php','POST',{userId : userid});
-        },
-        
-        // ────────────────────────────────────────
-        // SERVEURS
-        // ────────────────────────────────────────
-        getUserServers: function(){
-            return request('recup_serv_in.php', 'GET', null);
-        },
-        
-        getAvailableServers: function(){
-            return request('recup_serveur.php', 'GET', null);
-        },
-        
-        joinServer: function(serverId){
-            return request('join_server.php', 'POST', { server_id: serverId });
-        },
-        getMemberRole:function(convID,serverID){
-            return request('getMemberRole.php','POST',{ConvId : convID,ServerId : serverID});
-        },
-        
-        // ────────────────────────────────────────
-        // SALONS (CHANNELS)
-        // ────────────────────────────────────────
-        getChannels: function(serverId){
-            return request('recup_salon.php', 'POST', { id: serverId });
-        },
-        getConv:function(userId){
-            return request('recup_convSalon.php','GET',null);
-        },
-        
-        // ────────────────────────────────────────
-        // MESSAGES
-        // ────────────────────────────────────────
-        sendMessage: function(serverId, channelId, text){
-            return request('ajax.php', 'POST', { 
-                servid: serverId, 
-                salonid: channelId, 
-                texte: text 
-            });
-        },
-        sendMP: function(convId,text){
-            return request('send_mp.php','POST',{convID :convId,texte : text});
-        },
-        getMP: function(convid){
-            return request('recup_private_Message.php','POST',{convid : convid});
-        },
-        
-        getMessages: function(serverId, channelId){
-            return request('recup_message.php', 'POST', { 
-                serverid: serverId, 
-                salonid: channelId 
-            });
-        },
-        
-        deleteMessage: function(messageId, convId) {
-            var data = { id: messageId };
-            if (convId) data.convid = convId;  
-            return request('supp_message.php', 'POST', data);
-        },
-        
-        editMessage: function(messageId, text,convId){
-            var data = {texte : text,id:messageId};
-            if (convId) data.convid = convId;
-            return request('edit_message.php', 'POST',data);
-        }
-    };
-})();
-
-/*
-// =============================================================================
-// API.JS — Correspondance anciens fichiers → nouvelles routes REST
-// =============================================================================
-// Ancien                        Nouveau
-// ─────────────────────────────────────────────────────────────────────────────
-// test_connexion.php         →  POST   api/auth/login.php
-// inscription.php            →  POST   api/auth/register.php
-// log_out.php                →  GET    api/auth/logout.php
-// changement_mdp.php         →  POST   api/auth/password.php
-// reset_password.php         →  GET    api/auth/password.php?token=X
-// get_user_info.php          →  GET    api/users/index.php
-// getUser.php                →  GET    api/users/index.php?id=X
-// recup_serv_in.php          →  GET    api/servers/index.php
-// recup_serveur.php          →  GET    api/servers/index.php?available
-// join_server.php            →  POST   api/servers/index.php
-// recup_salon.php            →  GET    api/channels/index.php?server_id=X
-// recup_message.php          →  GET    api/channels/messages.php?server_id=X&channel_id=Y
-// ajax.php                   →  POST   api/channels/messages.php
-// edit_message.php (server)  →  PUT    api/channels/messages.php
-// supp_message.php (server)  →  DELETE api/channels/messages.php
-// recup_convSalon.php        →  GET    api/conversations/index.php
-// recup_private_Message.php  →  GET    api/conversations/index.php?id=X
-// send_mp.php                →  POST   api/conversations/index.php
-// edit_message.php (mp)      →  PUT    api/conversations/index.php
-// supp_message.php (mp)      →  DELETE api/conversations/index.php
-// getMemberRole.php          →  GET    api/members/index.php?server_id=X
-// =============================================================================
-
-const API = (function () {
-    'use strict';
-
-    const BASE = 'php/api';
-
-    // Helper générique
-    function request(url, method, data) {
-        var options = {
-            url: url,
-            type: method,
-            success: function (response) {
-                console.log('API Success: ' + url.split('/').pop(), response);
-            },
-            error: function (xhr) {
-                console.error('API Error: ' + url.split('/').pop(), xhr.responseText);
-            }
         };
 
         if (data) options.data = data;
 
         return $.ajax(options);
     }
-
     // ============================================
     // AUTH
     // ============================================
@@ -305,4 +168,32 @@ const API = (function () {
         getMemberRole
     };
 
-})();*/ 
+})();
+
+// =============================================================================
+// API.JS — Correspondance anciens fichiers → nouvelles routes REST
+// =============================================================================
+// Ancien                        Nouveau
+// ─────────────────────────────────────────────────────────────────────────────
+// test_connexion.php         →  POST   api/auth/login.php
+// inscription.php            →  POST   api/auth/register.php
+// log_out.php                →  GET    api/auth/logout.php
+// changement_mdp.php         →  POST   api/auth/password.php
+// reset_password.php         →  GET    api/auth/password.php?token=X
+// get_user_info.php          →  GET    api/users/index.php
+// getUser.php                →  GET    api/users/index.php?id=X
+// recup_serv_in.php          →  GET    api/servers/index.php
+// recup_serveur.php          →  GET    api/servers/index.php?available
+// join_server.php            →  POST   api/servers/index.php
+// recup_salon.php            →  GET    api/channels/index.php?server_id=X
+// recup_message.php          →  GET    api/channels/messages.php?server_id=X&channel_id=Y
+// ajax.php                   →  POST   api/channels/messages.php
+// edit_message.php (server)  →  PUT    api/channels/messages.php
+// supp_message.php (server)  →  DELETE api/channels/messages.php
+// recup_convSalon.php        →  GET    api/conversations/index.php
+// recup_private_Message.php  →  GET    api/conversations/index.php?id=X
+// send_mp.php                →  POST   api/conversations/index.php
+// edit_message.php (mp)      →  PUT    api/conversations/index.php
+// supp_message.php (mp)      →  DELETE api/conversations/index.php
+// getMemberRole.php          →  GET    api/members/index.php?server_id=X
+// =============================================================================

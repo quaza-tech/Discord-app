@@ -4,7 +4,7 @@
 // PUT    /api/channels/messages.php                          → modifier message   (ancien : edit_message.php)
 // DELETE /api/channels/messages.php                          → supprimer message  (ancien : supp_message.php)
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\MessageRepository;

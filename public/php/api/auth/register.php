@@ -2,7 +2,7 @@
 // POST /api/auth/register.php
 // Ancien fichier : inscription.php
 
-require_once __DIR__ . '/../../../src/bootstrap.php';
+require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\UserRepository;
