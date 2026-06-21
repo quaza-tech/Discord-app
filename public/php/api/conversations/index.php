@@ -53,6 +53,11 @@ try {
         case 'POST':
             $texte = $_POST['texte'] ?? '';
             $convId = $_POST['convID'] ?? '';
+            $res = $repo->isUserInConv($_SESSION["user"], $convId);
+            if ($res) {
+                echo json_encode(['status' => 'error', 'message' => 'Accès refusé']);
+                exit;
+            }
 
             if (trim($texte) === "" || empty($convId)) {
                 echo json_encode(['status' => 'error', 'message' => 'Paramètres manquants']);
@@ -71,7 +76,7 @@ try {
             $messageId = $data['id'] ?? '';
             $newText = $data['texte'] ?? '';
 
-            if (trim($messageId) === "" || empty($newText)) {
+            if (trim($messageId) === "" || trim($newText) === "") {
                 echo json_encode(['status' => 'error', 'message' => 'Paramètres manquants']);
                 exit;
             }

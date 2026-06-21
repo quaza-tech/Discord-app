@@ -78,7 +78,7 @@ class ConvRepository
          WHERE (user1_id = ? AND id = ?)
          OR (user2_id = ? AND id = ?)"
         );
-        $stmt->execute([$userId, $convID]);
+        $stmt->execute([$userId, $convID, $userId, $convID]);
         return !empty($stmt->fetchAll());
     }
     public function markAsRead(int $convId, int $userId)
