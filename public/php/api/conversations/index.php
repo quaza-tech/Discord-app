@@ -54,7 +54,7 @@ try {
             $texte = $_POST['texte'] ?? '';
             $convId = $_POST['convID'] ?? '';
             $res = $repo->isUserInConv($_SESSION["user"], $convId);
-            if ($res) {
+            if (!$res) {
                 echo json_encode(['status' => 'error', 'message' => 'Accès refusé']);
                 exit;
             }
