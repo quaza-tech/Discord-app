@@ -58,10 +58,12 @@ class ServerRepository
     {
         $stmt = $this->pdo->prepare(
             "INSERT INTO server_members (user_id, server_id, nickname, joined_at) 
-             VALUES (?, ?, ?, CURRENT_TIMESTAMP)"
+             VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+             INSERT INTO server_members_roles(member_id,server_id) 
+             VALUES (?, ?)"
         );
 
-        return $stmt->execute([$userId, $serverId, $nickname]);
+        return $stmt->execute([$userId, $serverId, $nickname, $userId, $serverId]);
     }
 
     // Récupérer les salons d'un serveur
@@ -80,6 +82,21 @@ class ServerRepository
         $stmt->execute([$serverId]);
 
         return $stmt->fetchAll();
+    }
+    public function getMemberPermissions(int $serverid, int $memberId): int
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT 
+            r.permissions
+        FROM server_members s
+        INNER JOIN users u ON s.user_id = u.id
+        LEFT JOIN server_members_roles smr ON smr.member_id = s.id
+        LEFT JOIN roles r ON r.id = smr.role_id
+        WHERE s.server_id = ? AND s.user_id = ?
+        ORDER BY r.permissions DESC"
+        );
+        $stmt->execute([$serverid, $memberId]);
+        return $stmt->fetch();
     }
     public function getMembre(int $serverid): array
     {
