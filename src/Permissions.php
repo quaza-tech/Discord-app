@@ -1,5 +1,7 @@
 <?php
-class Permission
+
+namespace App;
+class Permissions
 {
     const LIRE_MESSAGES = 1;
     const ENVOYER_MESSAGES = 2;
@@ -13,7 +15,7 @@ class Permission
     const BANNIR_MEMBRES = 512;
     const ADMINISTRATEUR = 1024;
 
-    public function hasPermission($totalPermissions, $permissionRequis): bool
+    public static function hasPermission($totalPermissions, $permissionRequis): bool
     {
         if (($totalPermissions & self::ADMINISTRATEUR) === self::ADMINISTRATEUR) {
             return true;

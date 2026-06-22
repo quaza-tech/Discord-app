@@ -58,12 +58,16 @@ class ServerRepository
     {
         $stmt = $this->pdo->prepare(
             "INSERT INTO server_members (user_id, server_id, nickname, joined_at) 
-             VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-             INSERT INTO server_members_roles(member_id,server_id) 
-             VALUES (?, ?)"
+             VALUES (?, ?, ?, CURRENT_TIMESTAMP)"
         );
+        $stmt->execute([$userId, $serverId, $nickname]);
+        $stmtBis = $this->pdo->prepare(
+            "INSERT INTO server_members_roles(member_id,role_id) 
+             VALUES (?, SELECT id FROM roles WHERE server_id = ? AND permissions = 3)"
+        );
+        $stmtBis->execute([$userId, $serverId]);
 
-        return $stmt->execute([$userId, $serverId, $nickname, $userId, $serverId]);
+        return !empty($stmt->fetchAll() & $stmtBis->fetchAll());
     }
 
     // Récupérer les salons d'un serveur
