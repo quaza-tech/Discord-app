@@ -49,7 +49,7 @@ try {
         case "POST":
             $repo = new ServerRepository($pdo);
             $permission = $repo->getMemberPermissions($serverId, $_SESSION["user"]);
-            if (!Permissions::hasPermission($permission, Permissions::GERER_SERVEUR)) {
+            if (!Permissions::hasPermission($permission, Permissions::GERER_ROLE)) {
                 echo json_encode(['status' => 'error', 'message' => 'Erreur de permission']);
                 exit;
             } else {
@@ -72,7 +72,7 @@ try {
         case "DELETE":
             $repo = new ServerRepository($pdo);
             $permission = $repo->getMemberPermissions($serverId, $_SESSION["user"]);
-            if (!Permissions::hasPermission($permission, Permissions::GERER_SERVEUR)) {
+            if (!Permissions::hasPermission($permission, Permissions::GERER_ROLE)) {
                 echo json_encode(['status' => 'error', 'message' => 'Erreur de permission']);
                 exit;
             } else {

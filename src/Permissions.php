@@ -5,7 +5,7 @@ class Permissions
 {
     const LIRE_MESSAGES = 1;
     const ENVOYER_MESSAGES = 2;
-    const GERER_MESSAGES = 4;
+    const GERER_ROLE = 4;
     const INVITER_MEMBRES = 8;
     const GERER_SALONS = 16;
     const GERER_SERVEUR = 32;

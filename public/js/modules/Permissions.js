@@ -3,7 +3,7 @@ const Permissions = (function () {
 
     const LIRE_MESSAGES = 1;
     const ENVOYER_MESSAGES = 2;
-    const GERER_MESSAGES = 4;
+    const GERER_ROLES = 4;
     const INVITER_MEMBRES = 8;
     const GERER_SALONS = 16;
     const GERER_SERVEUR = 32;
@@ -16,7 +16,7 @@ const Permissions = (function () {
     return {
         LIRE_MESSAGES : LIRE_MESSAGES,
         ENVOYER_MESSAGES : ENVOYER_MESSAGES,
-        GERER_MESSAGES : GERER_MESSAGES,
+        GERER_ROLES : GERER_ROLES,
         INVITER_MEMBRES : INVITER_MEMBRES,
          GERER_SALONS : GERER_SALONS,
          GERER_SERVEUR : GERER_SERVEUR,
