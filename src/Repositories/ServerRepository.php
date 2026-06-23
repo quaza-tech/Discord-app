@@ -58,16 +58,19 @@ class ServerRepository
     {
         $stmt = $this->pdo->prepare(
             "INSERT INTO server_members (user_id, server_id, nickname, joined_at) 
-             VALUES (?, ?, ?, CURRENT_TIMESTAMP)"
+             VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+             RETURNING id"
         );
-        $stmt->execute([$userId, $serverId, $nickname]);
+        $res = $stmt->execute([$userId, $serverId, $nickname]);
+        $memberId = $stmt->fetchColumn();
         $stmtBis = $this->pdo->prepare(
-            "INSERT INTO server_members_roles(member_id,role_id) 
-             VALUES (?, SELECT id FROM roles WHERE server_id = ? AND permissions = 3)"
+            "INSERT INTO server_members_roles (member_id, role_id)
+            SELECT ?, id FROM roles WHERE server_id = ? AND permissions = 3"
         );
-        $stmtBis->execute([$userId, $serverId]);
+        $resBis = $stmtBis->execute([$memberId, $serverId]);
+        $count = $stmtBis->rowCount();
 
-        return !empty($stmt->fetchAll() & $stmtBis->fetchAll());
+        return ($res && $resBis && $count != 0);
     }
 
     // Récupérer les salons d'un serveur
@@ -87,20 +90,75 @@ class ServerRepository
 
         return $stmt->fetchAll();
     }
+
+    public function getRoleByServer(int $serverID): array
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT id, nom, couleur, permissions 
+            FROM roles 
+            WHERE server_id = ? 
+            ORDER BY permissions 
+            DESC"
+        );
+
+        $stmt->execute([$serverID]);
+        return $stmt->fetchAll();
+
+    }
     public function getMemberPermissions(int $serverid, int $memberId): int
     {
         $stmt = $this->pdo->prepare(
-            "SELECT 
-            r.permissions
-        FROM server_members s
-        INNER JOIN users u ON s.user_id = u.id
-        LEFT JOIN server_members_roles smr ON smr.member_id = s.id
-        LEFT JOIN roles r ON r.id = smr.role_id
-        WHERE s.server_id = ? AND s.user_id = ?
-        ORDER BY r.permissions DESC"
+            "SELECT bit_or(r.permissions) 
+            FROM server_members s
+            LEFT JOIN server_members_roles smr ON smr.member_id = s.id
+            LEFT JOIN roles r ON r.id = smr.role_id
+            WHERE s.server_id = ? AND s.user_id = ?"
         );
         $stmt->execute([$serverid, $memberId]);
-        return $stmt->fetch();
+        $valeur = $stmt->fetchColumn();
+        return (int) ($valeur ?? 0);
+    }
+    public function getMemberId(int $userId, int $serverId): ?int
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT id 
+            FROM server_members
+            WHERE user_id = ?
+            AND server_id = ?"
+        );
+        $stmt->execute([$userId, $serverId]);
+        $id = $stmt->fetchColumn();
+        if ($id === false) {
+            return null;
+        }
+        return (int) $id;
+
+    }
+
+    public function assignRole(int $memberId, int $roleId): bool
+    {
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO server_members_roles (member_id, role_id) 
+            VALUES (?, ?)"
+        );
+        $res = $stmt->execute([$memberId, $roleId]);
+        $count = $stmt->rowCount();
+
+        return ($res && $count != 0);
+
+    }
+
+    public function removeRole(int $memberId, int $roleId): bool
+    {
+        $stmt = $this->pdo->prepare(
+            "DELETE FROM server_members_roles
+             WHERE member_id = ? 
+             AND role_id = ?"
+        );
+        $res = $stmt->execute([$memberId, $roleId]);
+        $count = $stmt->rowCount();
+
+        return ($res && $count != 0);
     }
     public function getMembre(int $serverid): array
     {
