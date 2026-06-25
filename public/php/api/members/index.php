@@ -49,7 +49,7 @@ try {
         case "POST":
             $repo = new ServerRepository($pdo);
             $permission = $repo->getMemberPermissions($serverId, $_SESSION["user"]);
-            if (!Permissions::hasPermission($permission, Permissions::GERER_ROLE)) {
+            if (!Permissions::hasPermission($permission, Permissions::GERER_ROLES)) {
                 echo json_encode(['status' => 'error', 'message' => 'Erreur de permission']);
                 exit;
             } else {
@@ -57,13 +57,18 @@ try {
                 $userId = $data['id'] ?? '';
                 $roleId = $data['roleId'] ?? '';
 
+                if (trim($userId) === '' || trim($roleId) === '') {
+                    echo json_encode(['status' => 'error', 'message' => "aucun id de role ou d'utilisateur envoyé"]);
+                }
+
                 $res = $repo->getMemberId($userId, $serverId);
                 if ($res === null) {
                     echo json_encode(['status' => 'error', 'message' => 'Utilisateur non présent']);
                     exit;
                 } else {
-                    $repo->assignRole($res, $roleId);
-                    echo json_encode(['status' => 'success', 'message' => 'Assignation de role']);
+                    $res = $repo->assignRole($res, $roleId);
+                    if ($res)
+                        echo json_encode(['status' => 'success', 'message' => 'Assignation de role']);
                 }
 
             }
@@ -72,7 +77,7 @@ try {
         case "DELETE":
             $repo = new ServerRepository($pdo);
             $permission = $repo->getMemberPermissions($serverId, $_SESSION["user"]);
-            if (!Permissions::hasPermission($permission, Permissions::GERER_ROLE)) {
+            if (!Permissions::hasPermission($permission, Permissions::GERER_ROLES)) {
                 echo json_encode(['status' => 'error', 'message' => 'Erreur de permission']);
                 exit;
             } else {
@@ -80,13 +85,18 @@ try {
                 $userId = $data['id'] ?? '';
                 $roleId = $data['roleId'] ?? '';
 
+                if (trim($userId) === '' || trim($roleId) === '') {
+                    echo json_encode(['status' => 'error', 'message' => "aucun id de role ou d'utilisateur envoyé"]);
+                }
+
                 $res = $repo->getMemberId($userId, $serverId);
                 if ($res === null) {
                     echo json_encode(['status' => 'error', 'message' => 'Utilisateur non présent']);
                     exit;
                 } else {
-                    $repo->removeRole($res, $roleId);
-                    echo json_encode(['status' => 'success', 'message' => 'Destition de role']);
+                    $res = $repo->removeRole($res, $roleId);
+                    if ($res)
+                        echo json_encode(['status' => 'success', 'message' => 'Destitution de role']);
                 }
 
             }
