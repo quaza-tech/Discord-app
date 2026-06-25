@@ -59,6 +59,7 @@ try {
 
                 if (trim($userId) === '' || trim($roleId) === '') {
                     echo json_encode(['status' => 'error', 'message' => "aucun id de role ou d'utilisateur envoyé"]);
+                    exit;
                 }
 
                 $res = $repo->getMemberId($userId, $serverId);
@@ -69,6 +70,8 @@ try {
                     $res = $repo->assignRole($res, $roleId);
                     if ($res)
                         echo json_encode(['status' => 'success', 'message' => 'Assignation de role']);
+                    else
+                        echo json_encode(['status' => 'error', 'message' => 'echec assignation']);
                 }
 
             }
@@ -87,6 +90,7 @@ try {
 
                 if (trim($userId) === '' || trim($roleId) === '') {
                     echo json_encode(['status' => 'error', 'message' => "aucun id de role ou d'utilisateur envoyé"]);
+                    exit;
                 }
 
                 $res = $repo->getMemberId($userId, $serverId);
@@ -97,6 +101,8 @@ try {
                     $res = $repo->removeRole($res, $roleId);
                     if ($res)
                         echo json_encode(['status' => 'success', 'message' => 'Destitution de role']);
+                    else
+                        echo json_encode(['status' => 'error', 'message' => 'echec de distitution']);
                 }
 
             }

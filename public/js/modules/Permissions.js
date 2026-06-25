@@ -12,6 +12,7 @@ const Permissions = (function () {
     const EXCLURE_MEMBRES = 256;
     const BANNIR_MEMBRES = 512;
     const ADMINISTRATEUR = 1024;
+    const GERER_ROLES = 2048;
 
     return {
         LIRE_MESSAGES : LIRE_MESSAGES,
@@ -24,7 +25,8 @@ const Permissions = (function () {
          SUPPRIMER_MESSAGES : SUPPRIMER_MESSAGES,
          EXCLURE_MEMBRES : EXCLURE_MEMBRES,
          BANNIR_MEMBRES : BANNIR_MEMBRES,
-         ADMINISTRATEUR : ADMINISTRATEUR
+         ADMINISTRATEUR : ADMINISTRATEUR,
+         GERER_ROLES : GERER_ROLES
     };
 
 })
