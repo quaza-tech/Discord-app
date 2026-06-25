@@ -82,6 +82,10 @@ const API = (function () {
         return request(BASE + '/servers/index.php', 'POST', { server_id: serverId });
     }
 
+    function getServerRoles(serverid){
+        return request(BASE + '/servers/roles.php?server_id=' + serverid, 'GET');
+    }
+
     // ============================================
     // CHANNELS
     // ============================================
@@ -138,6 +142,13 @@ const API = (function () {
         return request(BASE + '/members/index.php?' + $.param(params), 'GET');
     }
 
+    function assignRole(userId, serverId, roleId) {
+        return request(BASE +'/members/index.php?server_id=' + serverId , 'POST',{id : userId, roleId : roleId});
+    }
+
+    function removeRole(userId, serverId, roleId) {
+        return request(BASE +'/members/index.php?server_id=' + serverId, 'DELETE', {id : userId, roleId : roleId});
+    }
     // ============================================
     // EXPORTS
     // ============================================
@@ -154,6 +165,7 @@ const API = (function () {
         getUserServers,
         getAvailableServers,
         joinServer,
+        getServerRoles,
         // Channels
         getChannels,
         getMessages,
@@ -165,7 +177,9 @@ const API = (function () {
         getMP,
         sendMP,
         // Members
-        getMemberRole
+        getMemberRole,
+        assignRole,
+        removeRole
     };
 
 })();
