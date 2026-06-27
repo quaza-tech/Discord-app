@@ -42,8 +42,8 @@ const Permissions = (function () {
          BANNIR_MEMBRES : BANNIR_MEMBRES,
          ADMINISTRATEUR : ADMINISTRATEUR,
          GERER_ROLES : GERER_ROLES,
-         calculerTotalRole : calculerTotal,
-         aPerm : aPermission
+         calculerTotal : calculerTotal,
+         aPermission : aPermission
     };
 
 })()

@@ -19,16 +19,18 @@ $(document).ready(function () {
             //Calcul des Permissions de l'utilisateur actuel
 
             mesPerm = membresActuels.find(m => m.user_id == userActuel);
-            monTotal = Permissions.calculerTotalRole(mesPerm.roles);
+            monTotal = Permissions.calculerTotal(mesPerm.roles);
             canManageRoles = Permissions.aPermission(monTotal, Permissions.GERER_ROLES);
 
             //Role du membre cliqué et role du serveur
+            Role = null
+            RoleDispo = null
             if (canManageRoles) {
                 Role = membresActuels.find(m => m.user_id == User).roles;
                 RoleDispo = reponseRoles.data
             }
             
-            var $card = UIComponents.InfoUser(user.id, user.nickname, user.nom, user.avatar, user.banner, user.bios,canManageRoles,RoleDispo ?? null ,Role ?? null);
+            var $card = UIComponents.InfoUser(user.id, user.nickname, user.nom, user.avatar, user.banner, user.bios,canManageRoles,RoleDispo ,Role);
             
             $('body').append($card);
 
