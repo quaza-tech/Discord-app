@@ -448,14 +448,15 @@ function createRoleModal(allRole,MemberRole,UserId){
         var $checkBoxContainer = $('<div>', {class : 'checkBoxContainer'})
         
         allRole.forEach(role => {
+            var $spanCheckBox = $('<span>');
             var $checkBox = $('<input>',{class : "checkRole", type :"checkbox", "data-role-id" : role.id})
             var $labelRole = $('<label>', {class : "labelRole"}).text(role.nom)
             MemberRole.forEach(roleM => {
                 if (role.id == roleM.id)
                     $checkBox.prop('checked', true)
             });
-            $checkBox.append($labelRole)
-            $checkBoxContainer.append($checkBox);
+            $spanCheckBox.append($checkBox); $spanCheckBox.append($labelRole);
+            $checkBoxContainer.append($spanCheckBox);
 
         });
         

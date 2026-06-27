@@ -34,26 +34,40 @@ $(document).ready(function () {
 
             //Clique sur l'addition de role (Carte de l'utilisateur sur un serveur )
 
-            $('.user-card').on('click','.user-card-btn.third',function() {
-                var $roleMember = UIComponents.createRoleModal(RoleDispo,Role,user.id);
-
-                $('body').append($roleMember);
-
-                $('.checkBoxContainer').on('change','.checkRole',function() {
-                    var roleId = $(this).data('role-id');
-                    var estCochee = $(this).prop('checked');
-                    var user = $(this).closest('.voile').data('user-id')
-                    if (estCochee)
-                        API.assignRole(user,serveurActuel,roleId);
-                    else
-                        API.removeRole(user,serveurActuel,roleId);
-                })
-            })
+            
             
         });
     });
+    $('body').on('click','.user-card-btn.third',function() {
+    var $roleMember = UIComponents.createRoleModal(RoleDispo,Role,$(this).data('id'));
 
-    
-
-    
+    $('body').append($roleMember);
+    })
+    $('body').on('change','.checkRole',function() {
+        var roleId = $(this).data('role-id');
+        var estCochee = $(this).prop('checked');
+        var user = $(this).closest('.voile').data('user-id')
+        if (estCochee)
+            API.assignRole(user,serveurActuel,roleId)
+            .then(function(reponse) {
+                if (reponse.status.trim() == 'error')
+                    Validation.showToast("Erreur lors de l'assignation : "+reponse.message,"error");
+                else 
+                    Validation.showToast(reponse.message,"success");
+            })
+            .catch(function () {
+                Validation.showToast("Erreur lors de l'assignation", 'error', 3000);
+            });
+        else
+            API.removeRole(user,serveurActuel,roleId)
+            .then(function(reponse) {
+                if (reponse.status.trim() == 'error')
+                    Validation.showToast("Erreur lors de la destitution : "+reponse.message,"error");
+                else 
+                    Validation.showToast(reponse.message,"success");
+            })
+            .catch(function () {
+                Validation.showToast("Erreur lors de la destitution", 'error', 3000);
+            });
+        })
 });
