@@ -432,6 +432,7 @@ function InfoUser(userID, nickname, nom, icon, banner, bios,canManageRoles, allR
     if (canManageRoles){
         var $btnViewRole = $('<button>', { class: 'user-card-btn third', 'data-id': userID }).text('+');
         $actions.append($btnViewRole);
+
     };
     $body.append($username, $tag, $divider1, $bioLabel, $bio, $divider2, $actions);
     $container.append($banner, $avatarWrapper, $body);
@@ -439,6 +440,32 @@ function InfoUser(userID, nickname, nom, icon, banner, bios,canManageRoles, allR
 
     return $voile;
 }
+
+function createRoleModal(allRole,MemberRole,UserId){
+        var $voile = $('<div>', { class: 'voile', "data-user-id" : UserId });
+        var $warning = $('<div>',{class : 'warning'});
+        var $titre = $('<h1>').text("Role");
+        var $checkBoxContainer = $('<div>', {class : 'checkBoxContainer'})
+        
+        allRole.forEach(role => {
+            var $checkBox = $('<input>',{class : "checkRole", type :"checkbox", "data-role-id" : role.id})
+            var $labelRole = $('<label>', {class : "labelRole"}).text(role.nom)
+            MemberRole.forEach(roleM => {
+                if (role.id == roleM.id)
+                    $checkBox.prop('checked', true)
+            });
+            $checkBox.append($labelRole)
+            $checkBoxContainer.append($checkBox);
+
+        });
+        
+        $warning.append($titre);
+        $warning.append($checkBoxContainer);
+        $voile.append($warning);
+
+        return $voile;
+
+    }
 function InfoUserMp(userID, nickname, nom, icon, banner, bios) {
     const bannerSrc = banner ? 'img/banner/' + banner : 'img/banner/default.jpg';
     const iconSrc   = icon   ? 'img/avatars/' + icon          : 'img/avatars/default.png';
@@ -498,6 +525,7 @@ return {
     createSectionSeparator: createSectionSeparator,
     AffichageInfoServer : AffichageInfoServer,
     InfoUser : InfoUser,
+    createRoleModal : createRoleModal,
     InfoUserMp : InfoUserMp
 };
 })();

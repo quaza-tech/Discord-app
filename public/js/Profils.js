@@ -24,12 +24,36 @@ $(document).ready(function () {
 
             //Role du membre cliqué et role du serveur
             if (canManageRoles) {
-                Role = membresActuels.find(m => m.user_id == User).permissions;
-                RoleDispo = reponseRoles
+                Role = membresActuels.find(m => m.user_id == User).roles;
+                RoleDispo = reponseRoles.data
             }
             
             var $card = UIComponents.InfoUser(user.id, user.nickname, user.nom, user.avatar, user.banner, user.bios,canManageRoles,RoleDispo ?? null ,Role ?? null);
+            
             $('body').append($card);
+
+            //Clique sur l'addition de role (Carte de l'utilisateur sur un serveur )
+
+            $('.user-card').on('click','.user-card-btn.third',function() {
+                var $roleMember = UIComponents.createRoleModal(RoleDispo,Role,user.id);
+
+                $('body').append($roleMember);
+
+                $('.checkBoxContainer').on('change','.checkRole',function() {
+                    var roleId = $(this).data('role-id');
+                    var estCochee = $(this).prop('checked');
+                    var user = $(this).closest('.voile').data('user-id')
+                    if (estCochee)
+                        API.assignRole(user,serveurActuel,roleId);
+                    else
+                        API.removeRole(user,serveurActuel,roleId);
+                })
+            })
+            
         });
     });
+
+    
+
+    
 });
