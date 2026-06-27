@@ -392,7 +392,7 @@ function AffichageInfoServer(id,nom,avatars){
 
         return $button;
     }
-function InfoUser(userID, nickname, nom, icon, banner, bios) {
+function InfoUser(userID, nickname, nom, icon, banner, bios,canManageRoles, allRoles, memberRoles) {
     const bannerSrc = banner ? 'img/banner/' + banner : 'img/banner/default.jpg';
     const iconSrc   = icon   ? 'img/avatars/' + icon          : 'img/avatars/default.png';
 
@@ -426,8 +426,13 @@ function InfoUser(userID, nickname, nom, icon, banner, bios) {
     var $actions  = $('<div>', { class: 'user-card-actions' });
     var $btnAmi   = $('<button>', { class: 'user-card-btn primary', 'data-id': userID }).text('+ Ami');
     var $btnBlock = $('<button>', { class: 'user-card-btn secondary', 'data-id': userID }).text('Bloquer');
+    
     $actions.append($btnAmi, $btnBlock);
 
+    if (canManageRoles){
+        var $btnViewRole = $('<button>', { class: 'user-card-btn third', 'data-id': userID }).text('+');
+        $actions.append($btnViewRole);
+    };
     $body.append($username, $tag, $divider1, $bioLabel, $bio, $divider2, $actions);
     $container.append($banner, $avatarWrapper, $body);
     $voile.append($container);

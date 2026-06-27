@@ -14,6 +14,21 @@ const Permissions = (function () {
     const ADMINISTRATEUR = 1024;
     const GERER_ROLES = 2048;
 
+    function calculerTotal(tableauRole){
+        var init = 0;
+        tableauRole.forEach(role => {
+            init = init | role.permissions;
+        });
+        return init;
+    }
+    function aPermission(total, permissionDemandee) {
+        if ((total & ADMINISTRATEUR) === ADMINISTRATEUR) {
+            return true;
+        }
+
+        return (total & permissionDemandee) === permissionDemandee;
+    }
+
     return {
         LIRE_MESSAGES : LIRE_MESSAGES,
         ENVOYER_MESSAGES : ENVOYER_MESSAGES,
@@ -26,7 +41,9 @@ const Permissions = (function () {
          EXCLURE_MEMBRES : EXCLURE_MEMBRES,
          BANNIR_MEMBRES : BANNIR_MEMBRES,
          ADMINISTRATEUR : ADMINISTRATEUR,
-         GERER_ROLES : GERER_ROLES
+         GERER_ROLES : GERER_ROLES,
+         calculerTotalRole : calculerTotal,
+         aPerm : aPermission
     };
 
-})
+})()

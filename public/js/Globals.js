@@ -9,3 +9,4 @@ var conversationActuelle = null;
 var typeActuel         = null;
 var nomActuel          = null;
 var premierChargement  = true;
+var membresActuels = null;

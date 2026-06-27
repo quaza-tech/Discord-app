@@ -187,12 +187,12 @@ $(document).ready(function () {
         API.getMemberRole(null, serveurActuel)
             .then(function (response) {
                 var membres = response.data;
-
+                membresActuels = membres;
                 if (!membres || membres.length === 0) {
                     Validation.showToast("Aucun membre trouvé", "warning", 3000);
                     return;
                 }
-
+                
                 $(".info").empty();
 
                 // Organiser par rôle
