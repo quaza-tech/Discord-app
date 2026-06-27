@@ -56,7 +56,9 @@ $(document).ready(function () {
                     Validation.showToast("Erreur lors de l'assignation : "+reponse.message,"error");
                 else 
                     Validation.showToast(reponse.message,"success");
+                    getMember();
             })
+
             .catch(function () {
                 Validation.showToast("Erreur lors de l'assignation", 'error', 3000);
             });
@@ -67,9 +69,11 @@ $(document).ready(function () {
                     Validation.showToast("Erreur lors de la destitution : "+reponse.message,"error");
                 else 
                     Validation.showToast(reponse.message,"success");
+                    getMember();
             })
             .catch(function () {
                 Validation.showToast("Erreur lors de la destitution", 'error', 3000);
             });
         })
 });
+

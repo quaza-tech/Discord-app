@@ -234,3 +234,4 @@ $(document).ready(function () {
             });
     }
 });
+window.getMember = getMember;

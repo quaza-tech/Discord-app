@@ -12,6 +12,34 @@ class ServerRepository
         $this->pdo = $pdo;
     }
 
+    //creation d'un serveur
+    public function createServer(int $ownerId,string $nom, string $description, string $icon, string $banner) : int 
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT nom From servers 
+            WHERE nom ILKE ?
+            "
+        );
+        $stmt->execute([$nom]);
+        $res = $stmt->rowCount();
+        if ($res == 0){
+
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO servers (nom,description,icon,owner_id,created_at,banner)
+            VALUES(?,?,?,?,CURRENT_TIMESTAMP,?)
+            "
+        );
+        $stmt->execute([$nom,$description,$icon,$ownerId,$banner]);
+        $newId = $this->pdo->lastInsertId();
+
+        $this->addMember($ownerId,$newId,null,true);
+
+        return $newId;
+
+        };
+
+    }
+
     // Serveurs de l'utilisateur
     public function findByUser(int $userId): array
     {
@@ -54,7 +82,7 @@ class ServerRepository
     }
 
     // Ajouter un membre
-    public function addMember(int $userId, int $serverId, string $nickname): bool
+    public function addMember(int $userId, int $serverId, string $nickname, bool $isOwner = false): bool
     {
         $stmt = $this->pdo->prepare(
             "INSERT INTO server_members (user_id, server_id, nickname, joined_at) 
@@ -65,9 +93,14 @@ class ServerRepository
         $memberId = $stmt->fetchColumn();
         $stmtBis = $this->pdo->prepare(
             "INSERT INTO server_members_roles (member_id, role_id)
-            SELECT ?, id FROM roles WHERE server_id = ? AND permissions = 3"
+            SELECT ?, id FROM roles WHERE server_id = ? AND permissions = ?"
         );
-        $resBis = $stmtBis->execute([$memberId, $serverId]);
+
+        if ($isOwner)
+            $resBis = $stmtBis->execute([$memberId, $serverId,3]);
+        else 
+            $resBis = $stmtBis->execute([$memberId,$serverId,2048]);
+
         $count = $stmtBis->rowCount();
 
         return ($res && $resBis && $count != 0);
