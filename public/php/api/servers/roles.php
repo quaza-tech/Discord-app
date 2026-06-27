@@ -5,7 +5,6 @@ require_once __DIR__ . '/../../../../src/bootstrap.php';
 
 use App\Database;
 use App\Repositories\ServerRepository;
-use App\Repositories\UserRepository;
 
 header('Content-Type: application/json');
 
