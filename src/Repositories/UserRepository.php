@@ -86,6 +86,30 @@ class UserRepository
         return new Users($id, $nom, $email);
     }
 
+    //modifier la bannière de l'utilisateur
+    public function updateBanner(int $user_id, string $banner): void 
+    {
+        $stmt = $this->pdo->prepare(
+            "UPDATE users 
+            SET banner = ?
+            WHERE id = ?
+            "
+        );
+        $stmt->execute([$banner,$user_id]);
+    }
+
+    //modifier l'avatars de l'utilisateur
+    public function updateAvatar(int $user_id, string $avatar): void 
+    {
+        $stmt = $this->pdo->prepare(
+            "UPDATE users 
+            SET avatar = ?
+            WHERE id = ?
+            "
+        );
+        $stmt->execute([$avatar,$user_id]);
+    }
+
     // Vérifier si email ou nom existe
     public function existsByEmailOrName(string $email, string $nom): bool
     {

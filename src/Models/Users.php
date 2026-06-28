@@ -67,6 +67,10 @@ class Users
     {
         $this->avatar = $avatar;
     }
+    public function setBanner(string $banner): void 
+    {
+        $this->banner = $banner;
+    }
     public function setBios(string $bios): void
     {
         $this->bios = $bios;
