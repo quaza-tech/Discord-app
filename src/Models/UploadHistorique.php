@@ -79,8 +79,8 @@ class UploadHistorique
         return new self(
             (int) $data['id'],
             (int) $data['user_id'],
-            (string) $data['file_name'],
             (string) $data['file_type'],
+            (string) $data['file_name'],
             new DateTime($data['upload_at'])
         );
     }
