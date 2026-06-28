@@ -13,31 +13,32 @@ class ServerRepository
     }
 
     //creation d'un serveur
-    public function createServer(int $ownerId,string $nom, string $description, string $icon, string $banner) : int 
+    public function createServer(int $ownerId, string $nom, string $description, string $icon, string $banner): int
     {
         $stmt = $this->pdo->prepare(
             "SELECT nom From servers 
-            WHERE nom ILKE ?
+            WHERE nom ILIKE ?
             "
         );
         $stmt->execute([$nom]);
         $res = $stmt->rowCount();
-        if ($res == 0){
+        if ($res == 0) {
 
-        $stmt = $this->pdo->prepare(
-            "INSERT INTO servers (nom,description,icon,owner_id,created_at,banner)
+            $stmt = $this->pdo->prepare(
+                "INSERT INTO servers (nom,description,icon,owner_id,created_at,banner)
             VALUES(?,?,?,?,CURRENT_TIMESTAMP,?)
+            RETURNING id
             "
-        );
-        $stmt->execute([$nom,$description,$icon,$ownerId,$banner]);
-        $newId = $this->pdo->lastInsertId();
+            );
+            $stmt->execute([$nom, $description, $icon, $ownerId, $banner]);
+            $newId = $stmt->fetchColumn();
 
-        $this->addMember($ownerId,$newId,null,true);
+            $this->addMember($ownerId, $newId, $nom, true);
 
-        return $newId;
+            return $newId;
+        }
 
-        };
-
+        return 0;
     }
 
     // Serveurs de l'utilisateur
@@ -91,16 +92,21 @@ class ServerRepository
         );
         $res = $stmt->execute([$userId, $serverId, $nickname]);
         $memberId = $stmt->fetchColumn();
-        $stmtBis = $this->pdo->prepare(
-            "INSERT INTO server_members_roles (member_id, role_id)
-            SELECT ?, id FROM roles WHERE server_id = ? AND permissions = ?"
-        );
 
-        if ($isOwner)
-            $resBis = $stmtBis->execute([$memberId, $serverId,3]);
-        else 
-            $resBis = $stmtBis->execute([$memberId,$serverId,2048]);
+        if ($isOwner) {
+            $stmtBis = $this->pdo->prepare(
+                "INSERT INTO server_members_roles (member_id, role_id)
+            SELECT ?, id FROM roles WHERE server_id = ? AND (permissions & 1024) = 1024"
+            );
 
+            $resBis = $stmtBis->execute([$memberId, $serverId]);
+        } else {
+            $stmtBis = $this->pdo->prepare(
+                "INSERT INTO server_members_roles (member_id, role_id)
+            SELECT ?, id FROM roles WHERE server_id = ? AND is_default = true"
+            );
+            $resBis = $stmtBis->execute([$memberId, $serverId]);
+        }
         $count = $stmtBis->rowCount();
 
         return ($res && $resBis && $count != 0);

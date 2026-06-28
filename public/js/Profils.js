@@ -54,9 +54,10 @@ $(document).ready(function () {
             .then(function(reponse) {
                 if (reponse.status.trim() == 'error')
                     Validation.showToast("Erreur lors de l'assignation : "+reponse.message,"error");
-                else 
+                else {
                     Validation.showToast(reponse.message,"success");
                     getMember();
+                }
             })
 
             .catch(function () {
@@ -67,9 +68,10 @@ $(document).ready(function () {
             .then(function(reponse) {
                 if (reponse.status.trim() == 'error')
                     Validation.showToast("Erreur lors de la destitution : "+reponse.message,"error");
-                else 
+                else {
                     Validation.showToast(reponse.message,"success");
                     getMember();
+                }
             })
             .catch(function () {
                 Validation.showToast("Erreur lors de la destitution", 'error', 3000);

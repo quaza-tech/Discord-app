@@ -233,5 +233,5 @@ $(document).ready(function () {
                 Validation.showToast("Erreur : impossible d'afficher les membres", "error", 3000);
             });
     }
+    window.getMember = getMember;
 });
-window.getMember = getMember;
