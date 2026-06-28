@@ -5,7 +5,7 @@ use App\Interfaces\FileStorageInterface;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 
-class S3StorageService
+class S3StorageService implements FileStorageInterface
 {
     private S3Client $s3;
 
@@ -40,17 +40,6 @@ class S3StorageService
     {
         try {
             $result = $this->s3->deleteObject([
-                'Bucket' => $_ENV['B2_BUCKET'],
-                'Key' => $nomFichier
-            ]);
-        } catch (S3Exception $e) {
-            return false;
-        }
-
-        // 2. Check to see if the object was deleted.
-        try {
-
-            $result = $this->s3->getObject([
                 'Bucket' => $_ENV['B2_BUCKET'],
                 'Key' => $nomFichier
             ]);

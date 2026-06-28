@@ -34,7 +34,7 @@ class MediaService
         $newName = $this->storage->upload($fichier);
 
         // 2. enregistrer une ligne dans l'historique via $this->historiqueRepo
-        $this->historiqueRepo->addUpload($userId, $type, $newName);
+        $this->historiqueRepo->addUpload($userId, $newName, $type);
 
         // 3. retourner le nouveau nom de fichier
         return $newName;
