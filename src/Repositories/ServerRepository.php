@@ -13,7 +13,7 @@ class ServerRepository
     }
 
     //creation d'un serveur
-    public function createServer(int $ownerId, string $nom, string $description, string $icon, string $banner): int
+    public function createServer(int $ownerId, string $ownerName, string $nom, string $description, string $icon, string $banner): int
     {
         $stmt = $this->pdo->prepare(
             "SELECT nom From servers 
@@ -33,7 +33,7 @@ class ServerRepository
             $stmt->execute([$nom, $description, $icon, $ownerId, $banner]);
             $newId = $stmt->fetchColumn();
 
-            $this->addMember($ownerId, $newId, $nom, true);
+            $this->addMember($ownerId, $newId, $ownerName, true);
 
             return $newId;
         }
@@ -98,7 +98,6 @@ class ServerRepository
                 "INSERT INTO server_members_roles (member_id, role_id)
             SELECT ?, id FROM roles WHERE server_id = ? AND (permissions & 1024) = 1024"
             );
-
             $resBis = $stmtBis->execute([$memberId, $serverId]);
         } else {
             $stmtBis = $this->pdo->prepare(
