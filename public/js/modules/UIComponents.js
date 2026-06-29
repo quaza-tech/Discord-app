@@ -55,11 +55,16 @@ const UIComponents = (function() {
         return $button;
     }
     function createServerCard(id, nom, icon) {
-        var $button = $('<button>', {
+        if (id == 0){var $button = $('<button>', {
+            class: 'ajout_serv',
+            'data-serv-id': id
+        });}
+        else{
+            var $button = $('<button>', {
             class: 'btn-serv',
             'data-serv-id': id
-        });
-
+        });}
+        
         var $container = $('<div>', {
             class: 'container-icon-serv',
             id: id
@@ -80,7 +85,7 @@ const UIComponents = (function() {
         return $button;
     }
     function createAddServerCard(){
-        var $button = $('<button>',{class : 'ajout_serv'}).text("+");
+        var $button = $('<button>',{class : 'create_serv'}).text("+");
 
         return $button;
     }
@@ -506,6 +511,9 @@ function InfoUserMp(userID, nickname, nom, icon, banner, bios) {
     $container.append($banner, $avatarWrapper, $body);
 
     return $container;
+}
+function createModalCreationServer(){
+    var container = $("<div>", {class : server-from});
 }
 
 return {

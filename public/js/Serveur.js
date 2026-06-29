@@ -20,8 +20,11 @@ $(document).ready(function () {
                     $('.serv').append($server);
                 });
 
-                var $plusBtn = UIComponents.createAddServerCard();
+                var $plusBtn = UIComponents.createServerCard(0,"ajout",'compas.png');
                 $('.serv').append($plusBtn);
+
+                var $createBtn = UIComponents.createAddServerCard();
+                $('.serv').append($createBtn);
 
                 if (premierChargement) {
                     premierChargement = false;
@@ -72,6 +75,12 @@ $(document).ready(function () {
             });
     });
 
+    //=============================================
+    // FORMULAIRE DE CREATION DE SERVEUR
+    //=============================================
+    $('.serv').on('click','.create_serv',function() {
+        
+    })
     // ============================================
     // AFFICHAGE DES SALONS DU SERVEUR
     // ============================================
