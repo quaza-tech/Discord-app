@@ -82,6 +82,7 @@ $(document).ready(function () {
         var modalServer = UIComponents.createServer();
 
         $("body").append(modalServer);
+        bindServerModalEvents(modalServer);
 
         function bindServerModalEvents($voile) {
         
@@ -173,7 +174,7 @@ $(document).ready(function () {
             
             API.createServer(formData)
             .then(function(reponse) {
-                if (response.status === 'success' || response.trim() === 'success') {
+                if (reponse.status === 'success') {
                     Validation.showToast('Vous avez creer le serveur !', 'success', 3000);
                     affichageDesServeurs();
                     $('.voile').remove();
@@ -181,7 +182,7 @@ $(document).ready(function () {
                     Validation.showToast('Impossible de creer le serveur', 'error', 3000);
                 }
             })
-            .catch(function (reponse) {
+            .catch(function () {
                 Validation.showToast('Erreur de connexion', 'error', 3000);
             })
         }

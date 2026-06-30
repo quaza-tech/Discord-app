@@ -86,9 +86,15 @@ const API = (function () {
         return request(BASE + '/servers/roles.php?server_id=' + serverid, 'GET');
     }
 
-    function createServer() {
-        return request(BASE + '/servers/create.php','POST', {})
-    }
+    function createServer(formData) {
+    return $.ajax({
+        url: BASE + '/servers/create.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false
+    });
+}
 
     // ============================================
     // CHANNELS

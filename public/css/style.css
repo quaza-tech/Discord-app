@@ -54,6 +54,9 @@ button:hover {
     background-color: #36393f;
     color: white;
     border-right: 3px solid #40444b;
+    overflow-y: scroll;
+    scrollbar-color: rgb(40, 40, 40) rgb(63, 63, 63);
+    scrollbar-width: thin;
 }
 
 .serv .container-icon-serv {
