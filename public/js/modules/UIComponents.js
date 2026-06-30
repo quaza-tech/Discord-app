@@ -512,8 +512,78 @@ function InfoUserMp(userID, nickname, nom, icon, banner, bios) {
 
     return $container;
 }
-function createModalCreationServer(){
-    var container = $("<div>", {class : server-from});
+function createServer() {
+    var $voile = $('<div>', { class: 'voile' });
+    var $modal = $('<div>', { class: 'modal' });
+ 
+    // Zone bannière
+    var $bannerZone = $('<div>', { class: 'banner-zone', id: 'banner-zone' });
+    var $bannerPreview = $('<img>', { id: 'banner-preview', alt: 'Bannière' });
+ 
+    var $bannerPlaceholder = $('<div>', { class: 'banner-placeholder', id: 'banner-placeholder' });
+    var $bannerIcon = $(
+        '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
+            '<rect x="3" y="3" width="18" height="18" rx="3"/>' +
+            '<circle cx="8.5" cy="8.5" r="1.5"/>' +
+            '<polyline points="21 15 16 10 5 21"/>' +
+        '</svg>'
+    );
+    $bannerPlaceholder.append($bannerIcon, $('<span>').text('Ajouter une bannière'));
+ 
+    var $bannerEditBtn = $('<button>', { class: 'banner-edit-btn', type: 'button' }).text('✏️ Modifier');
+ 
+    $bannerZone.append($bannerPreview, $bannerPlaceholder, $bannerEditBtn);
+ 
+    // Icône flottante
+    var $iconWrapper = $('<div>', { class: 'icon-wrapper' });
+    var $iconZone = $('<div>', { class: 'icon-zone', id: 'icon-zone' });
+    var $iconPreview = $('<img>', { id: 'icon-preview', alt: 'Icône' });
+ 
+    var $iconPlaceholder = $('<div>', { class: 'icon-placeholder', id: 'icon-placeholder' });
+    $iconPlaceholder.append($(
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">' +
+            '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>' +
+        '</svg>'
+    ));
+ 
+    $iconZone.append($iconPreview, $iconPlaceholder);
+    var $iconBadge = $('<div>', { class: 'icon-add-badge' }).text('+');
+    $iconWrapper.append($iconZone, $iconBadge);
+ 
+    //Inputs fichiers cachés
+    var $iconInput = $('<input>', { type: 'file', id: 'icon-input', accept: 'image/*' });
+    var $bannerInput = $('<input>', { type: 'file', id: 'banner-input', accept: 'image/*' });
+ 
+    //Corps du formulaire
+    var $formBody = $('<div>', { class: 'form-body' });
+    $formBody.append($('<h2>').text('Créer votre serveur'));
+    $formBody.append($('<p>', { class: 'subtitle' }).text('Donnez un nom et une identité visuelle à votre serveur.'));
+ 
+    var $label = $('<label>', { class: 'field-label', for: 'server-name' }).text('Nom du serveur');
+    var $nameInput = $('<input>', {
+        type: 'text',
+        id: 'server-name',
+        placeholder: 'Mon super serveur',
+        maxlength: 100
+    });
+ 
+    var $charCount = $('<div>', { class: 'char-count' });
+    $charCount.append($('<span>', { id: 'name-count' }).text('0'), ' / 100');
+ 
+    $formBody.append($label, $nameInput, $charCount);
+ 
+    //Actions
+    var $actions = $('<div>', { class: 'actions' });
+    var $cancelBtn = $('<button>', { class: 'btn btn-ghost', type: 'button', id: 'cancel-btn' }).text('Annuler');
+    var $submitBtn = $('<button>', { class: 'btn btn-primary', type: 'button', id: 'submit-btn', disabled: true }).text('Créer');
+    $actions.append($cancelBtn, $submitBtn);
+    $formBody.append($actions);
+ 
+    //Assemblage final
+    $modal.append($bannerZone, $iconWrapper, $iconInput, $bannerInput, $formBody);
+    $voile.append($modal);
+ 
+    return $voile;
 }
 
 return {
@@ -535,6 +605,7 @@ return {
     AffichageInfoServer : AffichageInfoServer,
     InfoUser : InfoUser,
     createRoleModal : createRoleModal,
-    InfoUserMp : InfoUserMp
+    InfoUserMp : InfoUserMp,
+    createServer : createServer
 };
 })();

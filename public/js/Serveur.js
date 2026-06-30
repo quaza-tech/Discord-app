@@ -79,6 +79,113 @@ $(document).ready(function () {
     // FORMULAIRE DE CREATION DE SERVEUR
     //=============================================
     $('.serv').on('click','.create_serv',function() {
+        var modalServer = UIComponents.createServer();
+
+        $("body").append(modalServer);
+
+        function bindServerModalEvents($voile) {
+        
+            // Ouvrir l'explorateur au clic sur les zones
+            $voile.find('#banner-zone').on('click', function () {
+                $voile.find('#banner-input').trigger('click');
+            });
+        
+            $voile.find('.banner-edit-btn').on('click', function (e) {
+                e.stopPropagation();
+                $voile.find('#banner-input').trigger('click');
+            });
+        
+            $voile.find('#icon-zone').on('click', function () {
+                $voile.find('#icon-input').trigger('click');
+            });
+        
+            // Prévisualisation icône
+            $voile.find('#icon-input').on('change', function (e) {
+                previewImage(e.target.files[0], $voile.find('#icon-preview'), $voile.find('#icon-placeholder'));
+            });
+        
+            // Prévisualisation bannière
+            $voile.find('#banner-input').on('change', function (e) {
+                previewImage(e.target.files[0], $voile.find('#banner-preview'), $voile.find('#banner-placeholder'));
+            });
+        
+            //Compteur de caractères + activation bouton Créer
+            $voile.find('#server-name').on('input', function () {
+                var len = $(this).val().length;
+                $voile.find('#name-count').text(len);
+                $voile.find('#submit-btn').prop('disabled', len === 0);
+            });
+        
+            // Annuler : ferme la modale
+            $voile.find('#cancel-btn').on('click', function () {
+                closeServerModal($voile);
+            });
+        
+            // Fermer en cliquant sur le voile (en dehors de la modale)
+            $voile.on('click', function (e) {
+                if (e.target === this) {
+                    closeServerModal($voile);
+                }
+            });
+        
+            // Soumission
+            $voile.find('#submit-btn').on('click', function () {
+                submitServerForm($voile);
+            });
+        }
+        
+        /**
+         * Lit un fichier image et l'affiche dans $imgEl, masque $placeholderEl.
+         */
+        function previewImage(file, $imgEl, $placeholderEl) {
+            if (!file) return;
+        
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                $imgEl.attr('src', event.target.result).show();
+                $placeholderEl.hide();
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        /**
+         * Ferme et retire la modale du DOM.
+         */
+        function closeServerModal($voile) {
+            $voile.remove();
+        }
+        
+        /**
+         * Récupère les données du formulaire et les envoie au serveur.
+         * Adapte l'URL / le traitement selon ton API (php/api/...).
+         */
+        function submitServerForm($voile) {
+            var name = $voile.find('#server-name').val().trim();
+            var iconFile = $voile.find('#icon-input')[0].files[0];
+            var bannerFile = $voile.find('#banner-input')[0].files[0];
+        
+            if (!name) return;
+        
+            var formData = new FormData();
+            formData.append('name', name);
+            if (iconFile) formData.append('icon', iconFile);
+            if (bannerFile) formData.append('banner', bannerFile);
+            
+            API.createServer(formData)
+            .then(function(reponse) {
+                if (response.status === 'success' || response.trim() === 'success') {
+                    Validation.showToast('Vous avez creer le serveur !', 'success', 3000);
+                    affichageDesServeurs();
+                    $('.voile').remove();
+                } else {
+                    Validation.showToast('Impossible de creer le serveur', 'error', 3000);
+                }
+            })
+            .catch(function (reponse) {
+                Validation.showToast('Erreur de connexion', 'error', 3000);
+            })
+        }
+        
         
     })
     // ============================================

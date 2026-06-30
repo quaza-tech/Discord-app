@@ -86,6 +86,10 @@ const API = (function () {
         return request(BASE + '/servers/roles.php?server_id=' + serverid, 'GET');
     }
 
+    function createServer() {
+        return request(BASE + '/servers/create.php','POST', {})
+    }
+
     // ============================================
     // CHANNELS
     // ============================================
@@ -166,6 +170,7 @@ const API = (function () {
         getAvailableServers,
         joinServer,
         getServerRoles,
+        createServer,
         // Channels
         getChannels,
         getMessages,
