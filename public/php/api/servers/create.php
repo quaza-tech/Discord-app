@@ -31,7 +31,7 @@ try {
         $description = $_POST['description'] ?? '';
 
         if (trim($nom) === "") {
-            echo json_encode(['status' => 'error', 'message' => 'ID serveur manquant']);
+            echo json_encode(['status' => 'error', 'message' => 'nom serveur manquant']);
             exit;
         }
 

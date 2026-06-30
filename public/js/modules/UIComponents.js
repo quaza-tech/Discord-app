@@ -37,9 +37,12 @@ const UIComponents = (function() {
             class: 'container-MP',
             id: id
         });
-        const avatarSrc = avatars 
-            ? 'img/avatars/' + avatars 
+        const avatarSrc = avatars.startsWith("http") 
+            ? avatars
+            : ['.jpg','.jpeg','.png'].some(extension => avatars.endsWith(extension))
+            ? 'img/avatars/' + avatars
             : 'img/avatars/default.png';
+
         var $avatar = $('<img>', {
             src: avatarSrc,
             class: 'icon',
@@ -70,9 +73,12 @@ const UIComponents = (function() {
             id: id
         });
         
-        const iconSrc = icon 
-            ? 'img/servers/icon/' + icon 
+        const iconSrc = icon.startsWith("http")
+            ? icon 
+            : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))
+            ? 'img/servers/icon/' + icon
             : 'img/servers/icon/default.png';
+            
         const $img = $('<img>', {
             src: iconSrc,
             alt: nom,
@@ -118,9 +124,12 @@ const UIComponents = (function() {
             id: 'message' + id
         });
         // Avatar avec fallback
-        const avatarSrc = icon 
-            ? 'img/avatars/' + icon 
+        const avatarSrc = icon.startWith("http") 
+            ? icon 
+            : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))
+            ? 'img/avatars/' + icon
             : 'img/avatars/default.png';
+
         var $avatar = $('<img>', {
             src: avatarSrc,
             class: 'avatar',
@@ -195,8 +204,10 @@ const UIComponents = (function() {
     function createHeaderServer(serverid,nom,banner){
         var $container = $('<div>',{class : 'serveur_salon',id : serverid});
 
-        const Vbanner = banner 
-                ? 'img/servers/banner/' + banner 
+        const Vbanner = banner.startWith("http") 
+                ? banner 
+                : ['.jpg','.jpeg','.png'].some(extension => banner.endsWith(extension))
+                ? 'img/servers/banner/' + banner
                 : 'img/servers/banner/default.jpg';
 
         var $bannerSrc = $('<img>',{class : 'banner-img banner-serv', alt : 'banner-server',src : Vbanner});
@@ -229,18 +240,24 @@ const UIComponents = (function() {
             id: 'serveur' + serverid
         });
         
-        const bannerSrc = banner  
-            ? 'img/servers/banner/' + banner 
+        const bannerSrc = banner.startWith("http")  
+            ? banner 
+            : ['.jpg','.jpeg','.png'].some(extension => banner.endsWith(extension))
+            ? 'img/servers/banner/' + banner
             : 'img/servers/banner/default.png';
+
         var $banner = $('<img>', {
             class: 'banner-img banner-serv',
             src: bannerSrc,
             alt: 'banner'
         });
         
-        const iconSrc = icon 
-            ? 'img/servers/icon/' + icon 
+        const iconSrc = icon.startWith("http") 
+            ? icon 
+            : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))
+            ? 'img/servers/icon/' + icon
             : 'img/servers/icon/default.png';
+
         var $icon = $('<img>', {
             class: 'icon', 
             src: iconSrc,
@@ -380,8 +397,10 @@ function AffichageInfoServer(id,nom,avatars){
             class: 'container-MP',
             id: id
         });
-        const avatarSrc = avatars 
-            ? 'img/avatars/' + avatars 
+        const avatarSrc = avatars.startWith("http") 
+            ? avatars 
+            : ['.jpg','.jpeg','.png'].some(extension => avatars.endsWith(extension))
+            ? 'img/avatars/' + avatars
             : 'img/avatars/default.png';
         var $avatar = $('<img>', {
             src: avatarSrc,
@@ -398,8 +417,17 @@ function AffichageInfoServer(id,nom,avatars){
         return $button;
     }
 function InfoUser(userID, nickname, nom, icon, banner, bios,canManageRoles, allRoles, memberRoles) {
-    const bannerSrc = banner ? 'img/banner/' + banner : 'img/banner/default.jpg';
-    const iconSrc   = icon   ? 'img/avatars/' + icon          : 'img/avatars/default.png';
+    const bannerSrc = banner.startWith("http") 
+                    ? banner 
+                    : ['.jpg','.jpeg','.png'].some(extension => banner.endsWith(extension)) 
+                    ?  'img/banner/' + banner
+                    : 'img/banner/default.jpg';
+
+    const iconSrc   = icon.startWith("http")   
+                    ? icon 
+                    : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))  
+                    ? 'img/avatars/' + icon       
+                    : 'img/avatars/default.png';
 
     var $voile     = $('<div>', { class: 'voile' });
     var $container = $('<div>', { class: 'user-card' });
@@ -473,8 +501,17 @@ function createRoleModal(allRole,MemberRole,UserId){
 
     }
 function InfoUserMp(userID, nickname, nom, icon, banner, bios) {
-    const bannerSrc = banner ? 'img/banner/' + banner : 'img/banner/default.jpg';
-    const iconSrc   = icon   ? 'img/avatars/' + icon          : 'img/avatars/default.png';
+    const bannerSrc = banner.startWith("http") 
+                    ? banner 
+                    : ['.jpg','.jpeg','.png'].some(extension => banner.endsWith(extension))
+                    ? 'img/banner/' + banner
+                    : 'img/banner/default.jpg';
+
+    const iconSrc   = icon.startWith("http")   
+                    ? icon      
+                    : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))
+                    ? 'img/avatars/'+ icon    
+                    : 'img/avatars/default.png';
 
     var $container = $('<div>', { class: 'user-cardMP' });
 

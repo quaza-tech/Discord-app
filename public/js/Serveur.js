@@ -168,7 +168,7 @@ $(document).ready(function () {
             if (!name) return;
         
             var formData = new FormData();
-            formData.append('name', name);
+            formData.append('nom', name);
             if (iconFile) formData.append('icon', iconFile);
             if (bannerFile) formData.append('banner', bannerFile);
             
@@ -179,7 +179,7 @@ $(document).ready(function () {
                     affichageDesServeurs();
                     $('.voile').remove();
                 } else {
-                    Validation.showToast('Impossible de creer le serveur', 'error', 3000);
+                    Validation.showToast(reponse.message, 'error', 3000);
                 }
             })
             .catch(function () {

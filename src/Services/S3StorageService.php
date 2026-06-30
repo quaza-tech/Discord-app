@@ -34,7 +34,7 @@ class S3StorageService implements FileStorageInterface
             'ContentType' => $fichier['type'],
         ]);
 
-        return $prefixe . $uniqueId . '.' . $extensiond;
+        return "https://s3.eu-central-003.backblazeb2.com/" + $prefixe . $uniqueId . '.' . $extensiond;
     }
     public function delete(string $nomFichier): bool
     {
