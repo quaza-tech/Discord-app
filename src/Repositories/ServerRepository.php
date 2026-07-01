@@ -55,6 +55,29 @@ class ServerRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    //modifie la bannière du serveur 
+    public function updateBanner(int $server_id, string $banner): void
+    {
+        $stmt = $this->pdo->prepare(
+            "UPDATE servers 
+            SET banner = ?
+            WHERE id = ?
+            "
+        );
+        $stmt->execute([$banner, $server_id]);
+    }
+
+    //modifier l'icon du serveur 
+    public function updateIcon(int $server_id, string $icon): void
+    {
+        $stmt = $this->pdo->prepare(
+            "UPDATE servers 
+            SET icon = ?
+            WHERE id = ?
+            "
+        );
+        $stmt->execute([$icon, $server_id]);
+    }
 
     // Serveurs de l'utilisateur
     public function findByUser(int $userId): array
