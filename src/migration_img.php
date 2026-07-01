@@ -1,6 +1,5 @@
 <?php
 
-namespace App;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Services\S3StorageService;
@@ -28,12 +27,15 @@ $resultUser = $userRepo->fetchAvatarsAndBanner();
 $resultServer = $serverRepo->fetchAvatarsAndBanner();
 
 foreach ($resultUser as $img) {
-    if ($img["avatar"] == !null) {
-        $urlAvatar = $paths['users']['avatar'] . $img["avatar"];
+    if (!is_null($img["avatar"])) {
+        $urlAvatar = $paths['users']['avatar'] . $img["avatar"];    ///['tmp_name' => $cheminLocal, 'name' => $nomFichier, 'type' => mime_content_type($cheminLocal)]
+        file_exists($urlAvatar);
+        $s3->upload(['tmp_name' => $urlAvatar,'name' => substr($img["avatar"], 0, -4), 'type' => mime_content_type($urlAvatar)]);
     }
-    if ($imgBanner == !null)
+    if (!is_null($img["banner"]))
         $urlbanner = $paths['users']['banner'] . $img["banner"];
-    $s3->upload()
+        file_exists($urlbanner);
+        $s3->upload(['tmp_name' => $urlbanner,'name' => substr($img["banner"], 0, -4), 'type' => mime_content_type($urlbanner)]);
 }
 
 ?>
