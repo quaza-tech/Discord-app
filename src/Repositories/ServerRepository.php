@@ -41,6 +41,21 @@ class ServerRepository
         return 0;
     }
 
+    //fonction temporaire de fetch de banner et icon
+    public function fetchAvatarsAndBanner(): array
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT id, icon, banner FROM servers
+            WHERE (icon IS NOT NULL 
+            AND icon  NOT ILIKE 'http%' )
+            OR (banner IS NOT NULL 
+            AND banner  NOT ILIKE 'http%' )
+            "
+        );
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
     // Serveurs de l'utilisateur
     public function findByUser(int $userId): array
     {

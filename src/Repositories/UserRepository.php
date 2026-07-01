@@ -87,7 +87,7 @@ class UserRepository
     }
 
     //modifier la bannière de l'utilisateur
-    public function updateBanner(int $user_id, string $banner): void 
+    public function updateBanner(int $user_id, string $banner): void
     {
         $stmt = $this->pdo->prepare(
             "UPDATE users 
@@ -95,11 +95,11 @@ class UserRepository
             WHERE id = ?
             "
         );
-        $stmt->execute([$banner,$user_id]);
+        $stmt->execute([$banner, $user_id]);
     }
 
     //modifier l'avatars de l'utilisateur
-    public function updateAvatar(int $user_id, string $avatar): void 
+    public function updateAvatar(int $user_id, string $avatar): void
     {
         $stmt = $this->pdo->prepare(
             "UPDATE users 
@@ -107,7 +107,22 @@ class UserRepository
             WHERE id = ?
             "
         );
-        $stmt->execute([$avatar,$user_id]);
+        $stmt->execute([$avatar, $user_id]);
+    }
+
+    //fonction temporaire de fetch banner et avatars
+    public function fetchAvatarsAndBanner(): array
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT id ,avatar, banner FROM users
+            WHERE (avatar IS NOT NULL 
+            AND avatar NOT ILIKE 'http%' )
+            OR (banner IS NOT NULL 
+            AND banner NOT ILIKE 'http%' )
+            "
+        );
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     // Vérifier si email ou nom existe
