@@ -26,6 +26,12 @@ $servRepo = new ServerRepository($pdo);
 $resultUser = $userRepo->fetchAvatarsAndBanner();
 $resultServer = $serverRepo->fetchAvatarsAndBanner();
 
+echo "Tu vas migrer X fichiers. Confirmer ? (oui/non) : ";
+$confirmation = trim(fgets(STDIN));
+if ($confirmation !== 'oui') {
+    exit("Migration annulée.");
+}
+
 foreach ($resultUser as $img) {
     if (!is_null($img["avatar"])) {
         $urlAvatar = $paths['users']['avatar'] . $img["avatar"];    ///['tmp_name' => $cheminLocal, 'name' => $nomFichier, 'type' => mime_content_type($cheminLocal)]
