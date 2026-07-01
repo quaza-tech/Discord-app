@@ -17,11 +17,11 @@ $paths = [
         'banner' => 'public/img/banners/',
     ],
 ];
-
-$s3 = new S3StorageService();
 $pdo = Database::getConnection();
+$s3 = new S3StorageService();
+
 $userRepo = new UserRepository($pdo);
-$servRepo = new ServerRepository($pdo);
+$serverRepo = new ServerRepository($pdo);
 
 $resultUser = $userRepo->fetchAvatarsAndBanner();
 $resultServer = $serverRepo->fetchAvatarsAndBanner();
@@ -37,8 +37,8 @@ foreach ($resultUser as $img) {
         $urlAvatar = $paths['users']['avatar'] . $img["avatar"];    ///['tmp_name' => $cheminLocal, 'name' => $nomFichier, 'type' => mime_content_type($cheminLocal)]
         $res = file_exists($urlAvatar);
         if ($res) {
-            $s3->upload(['tmp_name' => $urlAvatar, 'name' => $img["avatar"], 'type' => mime_content_type($urlAvatar)]);
-            $userRepo->updateAvatar($img["id"], $urlAvatar);
+            $url = $s3->upload(['tmp_name' => $urlAvatar, 'name' => $img["avatar"], 'type' => mime_content_type($urlAvatar)]);
+            $userRepo->updateAvatar($img["id"], $url);
         }
 
     }
@@ -46,8 +46,8 @@ foreach ($resultUser as $img) {
         $urlbanner = $paths['users']['banner'] . $img["banner"];
         $res = file_exists($urlbanner);
         if ($res) {
-            $s3->upload(['tmp_name' => $urlbanner, 'name' => $img["banner"], 'type' => mime_content_type($urlbanner)]);
-            $userRepo->updateBanner($img["id"], $urlbanner);
+            $url = $s3->upload(['tmp_name' => $urlbanner, 'name' => $img["banner"], 'type' => mime_content_type($urlbanner)]);
+            $userRepo->updateBanner($img["id"], $url);
         }
     }
 }
@@ -56,16 +56,16 @@ foreach ($resultServer as $img) {
         $urlAvatar = $paths['servers']['icon'] . $img["icon"];    ///['tmp_name' => $cheminLocal, 'name' => $nomFichier, 'type' => mime_content_type($cheminLocal)]
         $res = file_exists($urlAvatar);
         if ($res) {
-            $s3->upload(['tmp_name' => $urlAvatar, 'name' => $img["icon"], 'type' => mime_content_type($urlAvatar)]);
-            $serverRepo->updateIcon($img["id"], $urlAvatar);
+            $url = $s3->upload(['tmp_name' => $urlAvatar, 'name' => $img["icon"], 'type' => mime_content_type($urlAvatar)]);
+            $serverRepo->updateIcon($img["id"], $url);
         }
     }
     if ($img["banner"] !== null) {
         $urlbanner = $paths['servers']['banner'] . $img["banner"];
         $res = file_exists($urlbanner);
         if ($res) {
-            $s3->upload(['tmp_name' => $urlbanner, 'name' => $img["banner"], 'type' => mime_content_type($urlbanner)]);
-            $serverRepo->updateBanner($img["id"], $urlbanner);
+            $url = $s3->upload(['tmp_name' => $urlbanner, 'name' => $img["banner"], 'type' => mime_content_type($urlbanner)]);
+            $serverRepo->updateBanner($img["id"], $url);
         }
     }
 }
