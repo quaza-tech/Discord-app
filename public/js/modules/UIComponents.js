@@ -37,7 +37,7 @@ const UIComponents = (function() {
             class: 'container-MP',
             id: id
         });
-        const avatarSrc = avatars.startsWith("http") 
+        const avatarSrc = avatars && avatars.startsWith("http") 
             ? avatars
             : ['.jpg','.jpeg','.png'].some(extension => avatars.endsWith(extension))
             ? 'img/avatars/' + avatars
@@ -73,7 +73,7 @@ const UIComponents = (function() {
             id: id
         });
         
-        const iconSrc = icon.startsWith("http")
+        const iconSrc = icon && icon.startsWith("http")
             ? icon 
             : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))
             ? 'img/servers/icon/' + icon
@@ -124,7 +124,7 @@ const UIComponents = (function() {
             id: 'message' + id
         });
         // Avatar avec fallback
-        const avatarSrc = icon.startWith("http") 
+        const avatarSrc = icon && icon.startsWith("http") 
             ? icon 
             : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))
             ? 'img/avatars/' + icon
@@ -204,7 +204,7 @@ const UIComponents = (function() {
     function createHeaderServer(serverid,nom,banner){
         var $container = $('<div>',{class : 'serveur_salon',id : serverid});
 
-        const Vbanner = banner.startWith("http") 
+        const Vbanner = banner && banner.startsWith("http") 
                 ? banner 
                 : ['.jpg','.jpeg','.png'].some(extension => banner.endsWith(extension))
                 ? 'img/servers/banner/' + banner
@@ -240,7 +240,7 @@ const UIComponents = (function() {
             id: 'serveur' + serverid
         });
         
-        const bannerSrc = banner.startWith("http")  
+        const bannerSrc = banner && banner.startsWith("http")  
             ? banner 
             : ['.jpg','.jpeg','.png'].some(extension => banner.endsWith(extension))
             ? 'img/servers/banner/' + banner
@@ -252,7 +252,7 @@ const UIComponents = (function() {
             alt: 'banner'
         });
         
-        const iconSrc = icon.startWith("http") 
+        const iconSrc = icon && icon.startsWith("http") 
             ? icon 
             : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))
             ? 'img/servers/icon/' + icon
@@ -397,7 +397,7 @@ function AffichageInfoServer(id,nom,avatars){
             class: 'container-MP',
             id: id
         });
-        const avatarSrc = avatars.startWith("http") 
+        const avatarSrc = avatars && avatars.startsWith("http") 
             ? avatars 
             : ['.jpg','.jpeg','.png'].some(extension => avatars.endsWith(extension))
             ? 'img/avatars/' + avatars
@@ -417,13 +417,13 @@ function AffichageInfoServer(id,nom,avatars){
         return $button;
     }
 function InfoUser(userID, nickname, nom, icon, banner, bios,canManageRoles, allRoles, memberRoles) {
-    const bannerSrc = banner.startWith("http") 
+    const bannerSrc = banner && banner.startsWith("http") 
                     ? banner 
                     : ['.jpg','.jpeg','.png'].some(extension => banner.endsWith(extension)) 
                     ?  'img/banner/' + banner
                     : 'img/banner/default.jpg';
 
-    const iconSrc   = icon.startWith("http")   
+    const iconSrc   = icon && icon.startsWith("http")   
                     ? icon 
                     : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))  
                     ? 'img/avatars/' + icon       
@@ -501,13 +501,13 @@ function createRoleModal(allRole,MemberRole,UserId){
 
     }
 function InfoUserMp(userID, nickname, nom, icon, banner, bios) {
-    const bannerSrc = banner.startWith("http") 
+    const bannerSrc = banner && banner.startsWith("http") 
                     ? banner 
                     : ['.jpg','.jpeg','.png'].some(extension => banner.endsWith(extension))
                     ? 'img/banner/' + banner
                     : 'img/banner/default.jpg';
 
-    const iconSrc   = icon.startWith("http")   
+    const iconSrc   = icon && icon.startsWith("http")   
                     ? icon      
                     : ['.jpg','.jpeg','.png'].some(extension => icon.endsWith(extension))
                     ? 'img/avatars/'+ icon    
